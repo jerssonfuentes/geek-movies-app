@@ -1,0 +1,1 @@
+// movie.service.js - placeholder
