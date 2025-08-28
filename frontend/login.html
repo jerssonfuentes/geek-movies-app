@@ -1,1 +1,29 @@
-// login.html - placeholder
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geek Movies - Login</title>
+  <link rel="stylesheet" href="/frontend/css/styles.css">
+</head>
+<body>
+  <main class="auth-container">
+    <h2>Iniciar Sesión</h2>
+    <form id="login-form">
+      <input type="email" placeholder="Correo" required>
+      <input type="password" placeholder="Contraseña" required>
+      <button type="submit">Entrar</button>
+    </form>
+
+    <h3>¿No tienes cuenta?</h3>
+    <form id="register-form">
+      <input type="text" placeholder="Usuario" required>
+      <input type="email" placeholder="Correo" required>
+      <input type="password" placeholder="Contraseña" required>
+      <button type="submit">Registrarse</button>
+    </form>
+  </main>
+
+  <script src="/frontend/js/auth.js"></script>
+</body>
+</html>

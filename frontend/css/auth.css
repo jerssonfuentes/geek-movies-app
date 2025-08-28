@@ -1,1 +1,37 @@
-// auth.css - placeholder
+/* ===============================
+   Login & Registro
+================================= */
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--dark-color);
+}
+
+.auth-box {
+  background: var(--secondary-color);
+  padding: 30px;
+  border-radius: 10px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.auth-box h2 {
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.auth-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+}
+
+.auth-box button {
+  width: 100%;
+}
