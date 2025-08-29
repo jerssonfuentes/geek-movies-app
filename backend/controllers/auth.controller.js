@@ -1,31 +1,46 @@
+// backend/controllers/auth.controller.js
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/user.model");
+const { getDb } = require("../config/db");
+
+const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
 exports.register = async (req, res) => {
   try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json({ message: "Usuario registrado exitosamente", user });
-  } catch (error) {
-    res.status(400).json({ message: "Error al registrar usuario", error });
+    const { username, email, password, role } = req.body;
+    const db = getDb();
+    const users = db.collection("users");
+
+    const exists = await users.findOne({ email });
+    if (exists) return res.status(400).json({ message: "El email ya está registrado" });
+
+    const hashed = await bcrypt.hash(password, 10);
+    const user = new User({ username, email, password: hashed, role: role || "user" });
+
+    await users.insertOne(user);
+    res.status(201).json({ message: "Usuario registrado correctamente" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const db = getDb();
+    const users = db.collection("users");
 
-    if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ message: "Credenciales inválidas" });
-    }
+    const user = await users.findOne({ email });
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ message: "Credenciales incorrectas" });
 
-    res.json({ message: "Login exitoso", token });
-  } catch (error) {
-    res.status(500).json({ message: "Error en el login", error });
+    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
+
+    res.json({ message: "Login exitoso", token, role: user.role });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

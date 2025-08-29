@@ -2,51 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geek Movies - Login</title>
-  <link rel="stylesheet" href="/frontend/css/styles.css">
+  <title>Login - Geek Movies</title>
+  <link rel="stylesheet" href="./css/auth.css">
 </head>
 <body>
-  <!-- Fondo -->
-  <div class="background"></div>
-
-  <!-- Contenedor de login -->
   <div class="login-container">
-    <h1>Inicia sesión como usuario </h1>
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Correo o usuario" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
-      <button type="submit">Entrar</button>
-      <button type="button" id="adminLogin">Iniciar como Admin</button>
+    <h1>Geek Movies</h1>
 
-      <div class="options">
-        <label><input type="checkbox"> Recuérdame</label>
-        <a href="#">¿Necesitas ayuda?</a>
-      </div>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Correo" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button type="submit">Iniciar Sesión</button>
     </form>
-    <p class="register-text">¿Primera vez aquí? <a href="#">Suscríbete ahora</a>.</p>
+
+    <button id="registerBtn">Registrarse</button>
+    <button id="adminBtn">Iniciar como Admin</button>
+
+    <p id="message"></p>
   </div>
 
-  <script>
-    // Login normal
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-
-      if (user && pass) {
-        alert("Bienvenido " + user);
-        window.location.href = "/home.html"; 
-      } else {
-        alert("Credenciales incorrectas");
-      }
-    });
-
-    // Botón login admin
-    document.getElementById("adminLogin").addEventListener("click", () => {
-      alert("Bienvenido ADMIN 🚀");
-      window.location.href = "frontend/admin.html";
-    });
-  </script>
+  <script src="./js/auth.js"></script>
 </body>
 </html>

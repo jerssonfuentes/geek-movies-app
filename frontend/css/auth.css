@@ -1,37 +1,45 @@
-/* ===============================
-   Login & Registro
-================================= */
-
-.auth-container {
+body {
+  background: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f562aaf4-5dbb-4603-a32b-6ef6c2230136/dh0w8qv-9d8ee6b2-b41a-4681-ab9b-8a227560dc75.jpg") no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: var(--dark-color);
+  margin: 0;
 }
 
-.auth-box {
-  background: var(--secondary-color);
-  padding: 30px;
+.login-container {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
   border-radius: 10px;
-  width: 350px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  width: 300px;
+  color: white;
 }
 
-.auth-box h2 {
+.login-container h1 {
   margin-bottom: 20px;
-  color: var(--primary-color);
+  color: red;
 }
 
-.auth-box input {
+.login-container input {
   width: 100%;
   padding: 10px;
-  margin: 10px 0;
+  margin: 8px 0;
   border: none;
   border-radius: 5px;
 }
 
-.auth-box button {
+.login-container button {
   width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background: darkred;
 }
