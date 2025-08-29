@@ -7,23 +7,46 @@
   <link rel="stylesheet" href="/frontend/css/styles.css">
 </head>
 <body>
-  <main class="auth-container">
-    <h2>Iniciar Sesión</h2>
-    <form id="login-form">
-      <input type="email" placeholder="Correo" required>
-      <input type="password" placeholder="Contraseña" required>
+  <!-- Fondo -->
+  <div class="background"></div>
+
+  <!-- Contenedor de login -->
+  <div class="login-container">
+    <h1>Inicia sesión como usuario </h1>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Correo o usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
       <button type="submit">Entrar</button>
-    </form>
+      <button type="button" id="adminLogin">Iniciar como Admin</button>
 
-    <h3>¿No tienes cuenta?</h3>
-    <form id="register-form">
-      <input type="text" placeholder="Usuario" required>
-      <input type="email" placeholder="Correo" required>
-      <input type="password" placeholder="Contraseña" required>
-      <button type="submit">Registrarse</button>
+      <div class="options">
+        <label><input type="checkbox"> Recuérdame</label>
+        <a href="#">¿Necesitas ayuda?</a>
+      </div>
     </form>
-  </main>
+    <p class="register-text">¿Primera vez aquí? <a href="#">Suscríbete ahora</a>.</p>
+  </div>
 
-  <script src="/frontend/js/auth.js"></script>
+  <script>
+    // Login normal
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      if (user && pass) {
+        alert("Bienvenido " + user);
+        window.location.href = "/home.html"; 
+      } else {
+        alert("Credenciales incorrectas");
+      }
+    });
+
+    // Botón login admin
+    document.getElementById("adminLogin").addEventListener("click", () => {
+      alert("Bienvenido ADMIN 🚀");
+      window.location.href = "frontend/admin.html";
+    });
+  </script>
 </body>
 </html>
