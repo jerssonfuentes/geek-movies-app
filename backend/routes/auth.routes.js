@@ -4,6 +4,7 @@ const { registerValidator, loginValidator } = require("../utils/validators");
 
 const router = express.Router();
 
+// Rutas de autenticación
 router.post("/register", registerValidator, register);
 router.post("/login", loginValidator, login);
 

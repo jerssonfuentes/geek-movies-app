@@ -1,15 +1,30 @@
-const { MongoClient } = require("mongodb");
+// backend/config/db.js
 
-const uri = process.env.MONGO_URI || "mongodb://localhost:27017";
+const { MongoClient } = require('mongodb');
+require('dotenv').config();
+
+const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri);
+
 let db;
 
-async function connect() {
-  if (!db) {
+const connectDB = async () => {
+  try {
     await client.connect();
-    db = client.db(process.env.DB_NAME || "geekdb");
+    db = client.db('geek_movies'); 
+    console.log("✅ Conexión a MongoDB Atlas (Driver Oficial) exitosa");
+  } catch (error) {
+    console.error("❌ Error al conectar con MongoDB Atlas:", error);
+    process.exit(1);
   }
-  return { db, client };
-}
+};
 
-module.exports = { connect };
+
+const getDb = () => {
+  if (!db) {
+    throw new Error('La base de datos no está inicializada');
+  }
+  return db;
+};
+
+module.exports = { connectDB, getDb };
