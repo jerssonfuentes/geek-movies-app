@@ -1,46 +1,62 @@
-// backend/controllers/auth.controller.js
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/user.model");
-const { getDb } = require("../config/db");
+const { connect } = require("../config/db");
+const { validationResult } = require("express-validator");
 
-const JWT_SECRET = process.env.JWT_SECRET || "secret";
-
-exports.register = async (req, res) => {
+async function register(req, res, next) {
   try {
-    const { username, email, password, role } = req.body;
-    const db = getDb();
-    const users = db.collection("users");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    const exists = await users.findOne({ email });
-    if (exists) return res.status(400).json({ message: "El email ya está registrado" });
+    const { email, password, name } = req.body;
+    const { db } = await connect();
+
+    const exists = await db.collection("users").findOne({ email });
+    if (exists) return res.status(409).json({ msg: "El correo ya está registrado" });
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = new User({ username, email, password: hashed, role: role || "user" });
+    const result = await db.collection("users").insertOne({
+      name,
+      email,
+      password: hashed,
+      role: "user",
+      createdAt: new Date(),
+    });
 
-    await users.insertOne(user);
-    res.status(201).json({ message: "Usuario registrado correctamente" });
+    res.status(201).json({ id: result.insertedId });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
-};
+}
 
-exports.login = async (req, res) => {
+async function login(req, res, next) {
   try {
-    const { email, password } = req.body;
-    const db = getDb();
-    const users = db.collection("users");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    const user = await users.findOne({ email });
-    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+    const { email, password } = req.body;
+    const { db } = await connect();
+
+    const user = await db.collection("users").findOne({ email });
+    if (!user) return res.status(401).json({ msg: "Usuario no encontrado" });
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(401).json({ message: "Credenciales incorrectas" });
+    if (!match) return res.status(401).json({ msg: "Contraseña incorrecta" });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { sub: user._id.toString(), role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-    res.json({ message: "Login exitoso", token, role: user.role });
+    res.json({ token, role: user.role });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    next(err);
   }
-};
+}
+
+module.exports = { register, login };

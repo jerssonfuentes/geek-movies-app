@@ -1,15 +1,9 @@
-// Middleware centralizado para manejo de errores
-const errorMiddleware = (err, req, res, next) => {
-  console.error("❌ Error capturado:", err);
-
-  const status = err.status || 500;
-  const message = err.message || "Error interno del servidor";
-
-  res.status(status).json({
+function errorHandler(err, req, res, next) {
+  console.error("❌ Error:", err);
+  res.status(err.status || 500).json({
     success: false,
-    status,
-    message,
+    message: err.message || "Error interno del servidor",
   });
-};
+}
 
-module.exports = errorMiddleware;
+module.exports = errorHandler;

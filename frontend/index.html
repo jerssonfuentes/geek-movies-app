@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geek Movies - Inicio</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeekMovies - Inicio</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
 </head>
 <body>
-  <header>
-    <h1>🎬 Geek Movies</h1>
+  <!-- Header estilo Netflix -->
+  <header class="navbar">
+    <div class="logo">GeekMovies</div>
     <nav>
       <a href="index.html">Inicio</a>
-      <a href="movies.html">Películas</a>
-      <a href="login.html">Login</a>
+      <a href="#" id="categoriesBtn">Categorías</a>
+      <a href="admin.html" id="adminBtn" style="display:none;">Admin</a>
+      <a href="login.html" id="logoutBtn">Salir</a>
     </nav>
   </header>
 
-  <main>
-    <h2>Películas destacadas</h2>
-    <section id="movie-list" class="grid"></section>
+  <!-- Banner -->
+  <section class="banner">
+    <div class="banner-content">
+      <h1>Bienvenido a GeekMovies</h1>
+      <p>Descubre lo mejor en Anime, Ciencia Ficción, Superhéroes y más.</p>
+    </div>
+  </section>
+
+  <!-- Listado de películas estilo Netflix -->
+  <main class="movies-section">
+    <h2>Películas Populares</h2>
+    <div class="movie-row" id="moviesRow"></div>
   </main>
 
-  <script src="scripts/index.js"></script>
+  <script src="js/movies.js"></script>
 </body>
 </html>

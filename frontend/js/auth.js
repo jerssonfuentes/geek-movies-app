@@ -1,62 +1,52 @@
-const API_URL = "http://localhost:4000/api/auth";
+const form = document.getElementById("authForm");
+const toggleLink = document.getElementById("toggleForm");
+const formTitle = document.getElementById("formTitle");
+const submitBtn = document.getElementById("submitBtn");
 
-// Login
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
+let isLogin = true;
+
+toggleLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  isLogin = !isLogin;
+  if (isLogin) {
+    formTitle.textContent = "Iniciar Sesión";
+    submitBtn.textContent = "Iniciar Sesión";
+    toggleLink.textContent = "Regístrate aquí";
+  } else {
+    formTitle.textContent = "Registrarse";
+    submitBtn.textContent = "Registrarse";
+    toggleLink.textContent = "Inicia sesión aquí";
+  }
+});
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const res = await fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
+  const endpoint = isLogin ? "http://localhost:4000/api/auth/login" : "http://localhost:4000/api/auth/register";
+  const body = { email, password };
 
-  const data = await res.json();
-  document.getElementById("message").innerText = data.message;
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-  if (res.ok) {
-    localStorage.setItem("token", data.token);
-    if (data.role === "admin") {
-      window.location.href = "admin.html";
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(isLogin ? "Inicio de sesión exitoso" : "Registro exitoso");
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "index.html"; // redirige al inicio
+      }
     } else {
-      window.location.href = "index.html";
+      alert(data.msg || "Error en la petición");
     }
-  }
-});
-
-// Registro
-document.getElementById("registerBtn").addEventListener("click", async () => {
-  const email = prompt("Correo:");
-  const username = prompt("Usuario:");
-  const password = prompt("Contraseña:");
-  
-  const res = await fetch(`${API_URL}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, username, password }),
-  });
-
-  const data = await res.json();
-  alert(data.message);
-});
-
-// Admin directo
-document.getElementById("adminBtn").addEventListener("click", async () => {
-  const email = prompt("Correo admin:");
-  const password = prompt("Contraseña:");
-  
-  const res = await fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-
-  const data = await res.json();
-  if (res.ok && data.role === "admin") {
-    localStorage.setItem("token", data.token);
-    window.location.href = "admin.html";
-  } else {
-    alert("No eres administrador");
+  } catch (err) {
+    console.error(err);
+    alert("Error de conexión con el servidor");
   }
 });

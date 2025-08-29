@@ -1,30 +1,14 @@
-import Joi from "joi";
+const { body } = require("express-validator");
 
-/**
- * Esquema de validación para usuarios
- */
-export const userValidator = Joi.object({
-  username: Joi.string().min(3).max(30).required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-});
+const registerValidator = [
+  body("name").notEmpty().withMessage("El nombre es requerido"),
+  body("email").isEmail().withMessage("Email inválido"),
+  body("password").isLength({ min: 6 }).withMessage("La contraseña debe tener mínimo 6 caracteres"),
+];
 
-/**
- * Esquema de validación para películas
- */
-export const movieValidator = Joi.object({
-  title: Joi.string().min(1).required(),
-  description: Joi.string().min(10).required(),
-  releaseDate: Joi.date().required(),
-  category: Joi.string().required(),
-});
+const loginValidator = [
+  body("email").isEmail().withMessage("Email inválido"),
+  body("password").notEmpty().withMessage("La contraseña es requerida"),
+];
 
-/**
- * Esquema de validación para reviews
- */
-export const reviewValidator = Joi.object({
-  rating: Joi.number().min(1).max(5).required(),
-  comment: Joi.string().min(3).max(500).optional(),
-  movie: Joi.string().required(),
-  user: Joi.string().required(),
-});
+module.exports = { registerValidator, loginValidator };
